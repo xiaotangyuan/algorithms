@@ -2,7 +2,8 @@
 二分查找算法
 """
 
-data = [1,3,5,4,6,8,9,89,100]
+data = [1,4,6,8,9,89,100,101]
+# data = [1,3]
 
 
 def binary_search(data, num):
@@ -14,9 +15,16 @@ def binary_search(data, num):
 		loop_num += 1
 		if loop_num > 10:
 			return
-		check_index = (end_index-start_index)//2 + start_index
+		mod_index = (end_index-start_index)//2
+		if mod_index == 0:
+			if num == data[start_index]:
+				return num, start_index
+			if num == data[end_index]:
+				return num, end_index
+			break
+		check_index =  mod_index + start_index
 		tar_value = data[check_index]
-		print('check_index:', check_index, ' tar_value:', tar_value)
+		print('mod_index:', mod_index, 'start_index:', start_index, 'end_index:', end_index, 'check_index:', check_index, ' tar_value:', tar_value)
 		if num > tar_value:
 			print('%s > %s' % (num, tar_value))
 			start_index = check_index
