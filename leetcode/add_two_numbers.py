@@ -5,6 +5,25 @@ class ListNode(object):
         self.next = None
 
 
+def get_step_and_sig_val(l1, l2, step):
+    if l1 is None:
+        int1 = 0
+    else:
+        int1 = l1.val
+    if l2 is None:
+        int2 = 0
+    else:
+        int2 = l2.val
+    sum_val = int1 + int2 + step
+    if sum_val >= 10:
+        step = 1
+        sig_val = sum_val - 10
+    else:
+        step = 0
+        sig_val = sum_val
+    return step, sig_val
+
+
 class Solution(object):
     def addTwoNumbers(self, l1, l2):
         """
@@ -14,32 +33,14 @@ class Solution(object):
         """
         last_node = ListNode(None)
         root_node = last_node
-        add_one = 0
+        step = 0
         while 1:
             if l1 is None and l2 is None:
-                if add_one == 1:
-                    last_node.next =  ListNode(1)
                 break
-            if l1 is None:
-                l1_val = 0
-            else:
-                l1_val = l1.val
-            if l2 is None:
-                l2_val = 0
-            else:
-                l2_val = l2.val
-            sum_value = l1_val + l2_val + add_one
-            # print('%s = %s + %s + %s' % (sum_value, l1.val, l2.val, add_one))
-            if sum_value >= 10:
-                remain_value = sum_value - 10
-                add_one = 1
-            else:
-                remain_value = sum_value
-                add_one = 0
-            now_node = ListNode(remain_value)
+            step, sig_val = get_step_and_sig_val(l1, l2, step)
+            now_node = ListNode(sig_val)
             last_node.next = now_node
             last_node = now_node
-            # print(l1.val, l2.val, add_one)
             if l1 is not None:
                 l1 = l1.next
             if l2 is not None:
@@ -67,10 +68,10 @@ def get_number_from_links(number_links):
 
 
 if __name__ == '__main__':
-    # number1_list = [3,4,2]
-    # number2_list = [4,6,5]    
-    number1_list = [5]
-    number2_list = [5]
+    number1_list = [3,4,2]
+    number2_list = [4,6,5]    
+    # number1_list = [5]
+    # number2_list = [5]
     number1_links = make_links(number1_list)
     number2_links = make_links(number2_list)
 
