@@ -35,8 +35,16 @@ class Solution(object):
         root_node = last_node
         step = 0
         while 1:
-            if l1 is None and l2 is None:
-                break
+            if step == 0:
+                if l1 is None and l2 is None:
+                    break
+                if l1 is None:
+                    last_node.next = l2
+                    break
+                if l2 is None:
+                    last_node.next = l1
+                    break
+
             step, sig_val = get_step_and_sig_val(l1, l2, step)
             now_node = ListNode(sig_val)
             last_node.next = now_node
@@ -68,10 +76,10 @@ def get_number_from_links(number_links):
 
 
 if __name__ == '__main__':
-    number1_list = [3,4,2]
-    number2_list = [4,6,5]    
-    # number1_list = [5]
-    # number2_list = [5]
+    # number1_list = [3,4,2]
+    # number2_list = [4,6,5]    
+    number1_list = [5,1,2,3,1]
+    number2_list = [9]
     number1_links = make_links(number1_list)
     number2_links = make_links(number2_list)
 
