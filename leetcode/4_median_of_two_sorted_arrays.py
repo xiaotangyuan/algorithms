@@ -25,41 +25,51 @@ def get_mini_val_from_two_list(right_mini_nums, right_max_nums):
     return right_mini_nums[0], right_mini_nums if right_mini_nums[0] < right_max_nums[0] else right_max_nums[0], right_max_nums
 
 
+class MedianItem(object):
+	def __init__(self, num_index, num_list):
+		self.num_index = num_index
+		self.num_list = num_list
+
+	def get_val(self):
+		return self.num_list[self.num_index]
+
+
 class MeidanStack(object):
     def __init__(self):
-        self.datas = []
+        self.items = []
 
-    def add(self, num):
-        if len(self.datas) == 0:
-            self.datas.append(num)
+    def add(self, medianitem):
+    	medianitem_val = medianitem.get_val()
+        if len(self.items) == 0:
+            self.items.append(medianitem)
             return None, None
-        if len(self.datas) == 1:
-            if num >= self.datas[0]:
-                self.datas.append(num)
+        if len(self.items) == 1:
+            if medianitem_val >= self.items[0]:
+                self.items.append(medianitem)
             else:
-                self.datas.insert(0, num)
+                self.items.insert(0, medianitem)
             return None, None
         else:
-            if num <= self.datas[0]:
-                self.datas.insert(0, num)
-                right_popup = self.datas[-1]
-                self.datas = self.datas[:2]
+            if medianitem_val <= self.items[0]:
+                self.items.insert(0, medianitem)
+                right_popup = self.items[-1]
+                self.items = self.items[:2]
                 return None, right_popup
-            elif num >= self.datas[1]:
-                self.datas.append(num)
-                left_popup = self.datas[0]
-                self.datas = self.datas[-2:]
+            elif medianitem_val >= self.items[1]:
+                self.items.append(medianitem)
+                left_popup = self.items[0]
+                self.items = self.items[-2:]
                 return left_popup, None
             else:
-            	left_popup, right_popup = self.datas[0], self.datas[1]
-            	self.datas = [num]
+            	left_popup, right_popup = self.items[0], self.items[1]
+            	self.items = [medianitem]
             	return left_popup, right_popup
 
     def __str__(self):
-    	if len(self.datas) == 2:
-    		s = '%s , %s' % (self.datas[0], self.datas[1])
-    	elif len(self.datas) == 1:
-    		s = '%s' % self.datas[0]
+    	if len(self.items) == 2:
+    		s = '%s , %s' % (self.items[0], self.items[1])
+    	elif len(self.items) == 1:
+    		s = '%s' % self.items[0]
     	else:
     		s = ''
     	return s
