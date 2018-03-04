@@ -75,7 +75,6 @@ class MeidanStack(object):
     	return s
 
 
-
 class Solution(object):
     def findMedianSortedArrays(self, nums1, nums2):
         """
@@ -84,57 +83,28 @@ class Solution(object):
         :rtype: float
         """
         if len(nums1) > len(nums2):
-            max_nums = nums1
-            mini_nums = nums2
+        	max_nums, min_nums = nums1, nums2
         else:
-            max_nums = nums2
-            mini_nums = nums1
-        median_indexs = get_two_median_num_index_from_list(max_nums)
-        print('median_indexs:', median_indexs)
+        	max_nums, min_nums = nums2, nums1
+        indexs_list = get_two_median_num_index_from_list(max_nums)
 
-        if len(median_indexs) == 1:
-            median_index_left, median_index_right  = median_indexs[0], median_indexs[0]
-            medians = [max_nums[median_indexs[0]]]
-        else:
-            median_index_left, median_index_right  = median_indexs[0], median_indexs[1]
-            medians = [max_nums[median_indexs[0]], max_nums[median_indexs[1]]]
-        ms = MeidanStack()
-        ms.datas = medians
+        left_of_min_nums = []
+        middle_of_min_nums = []
+        right_of_min_nums = []
 
-        left_max_nums = max_nums[:median_index_left]
-        right_max_nums = max_nums[median_index_right+1:]
-        print(ms)
+        for num in min_nums:
+        	if num <= indexs_list[0]:
+        		left_of_min_nums.append(num)
+        	elif num >= indexs_list[-1]:
+        		right_of_min_nums.append(num)
+        	else:
+        		middle_of_min_nums.append(num)
 
-        left_mini_nums = []
-        right_mini_nums = []
+      	
 
-        def update_medians(num):
-            print(get_max_val_from_two_list(left_mini_nums, left_max_nums))
-            left_max_val, the_target_left_list = get_max_val_from_two_list(left_mini_nums, left_max_nums)
-            right_max_val, the_target_right_val = get_mini_val_from_two_list(right_mini_nums, right_max_nums)
-            if num <= left_max_val:
-                left_mini_nums.append(num)
-                left_popup, right_popup = ms.add(left_max_val)
-                the_target_left_list.pop()
-            elif num >= right_max_val:
-                right_mini_nums.append(num)
-                left_popup, right_popup = ms.add(right_max_val)
-                the_target_right_list.pop(0)
-            else:
-                left_popup, right_popup = ms.add(num)
-            if left_popup:
-                left_max_nums.append(left_popup)
-            if right_popup:
-                right_max_nums.insert(0, right_popup)
-            print('--%s--:' % num, left_max_val, right_max_val, left_popup, right_popup)
 
-        for num in mini_nums:
-            print('----------', left_mini_nums, left_max_nums, right_mini_nums, right_max_nums)
-            update_medians(num)
-            print(ms)
 
-        median1, median2 = ms.datas[0], ms.datas[1]
-        return (median1 + median2) / 2
+ 
 
 
 if __name__ == '__main__':
