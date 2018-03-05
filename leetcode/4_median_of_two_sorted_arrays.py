@@ -206,9 +206,10 @@ class Solution(object):
 
         median_indexs = get_two_median_num_index_from_list(middle_list)
         median_list = [middle_list[index] for index in median_indexs]
-        print('items:', items)
-        print(median_list)
-        print(sum(median_list)/2.0)
+        if len(median_list) == 1:
+            return median_list[0]
+        else:
+            return sum(median_list) / 2.0
 
 
 if __name__ == '__main__':
