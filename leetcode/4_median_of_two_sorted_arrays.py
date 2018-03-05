@@ -100,9 +100,40 @@ class Solution(object):
         	else:
         		middle_of_min_nums.append(num)
 
-      	
+        left_pointer_index_of_max_nums = indexs_list[0] - 1
+        right_pointer_index_of_max_nums = indexs_list[-1] + 1
 
+        left_of_min_nums_pointer_index = len(left_of_min_nums) - 1
+        right_of_min_nums_pointer_index = 0
 
+        def get_all_left_nums_length(left_pointer_index_of_max_nums, left_of_min_nums_pointer_index):
+        	left_of_max_nums_length = left_pointer_index_of_max_nums + 1
+        	left_of_min_nums_length = len(left_of_min_nums) - left_of_min_nums_pointer_index - 1
+        	return left_of_max_nums_length + left_of_min_nums_length
+
+        def get_all_right_nums_length(right_pointer_index_of_max_nums, right_of_min_nums_pointer_index):
+        	right_of_max_nums = len(max_nums) - right_pointer_index_of_max_nums - 1
+        	right_of_min_nums =  len(right_of_min_nums) - right_of_min_nums_pointer_index - 1
+        	return right_of_max_nums + right_of_min_nums
+
+       	left_length = get_all_left_nums_length(left_pointer_index_of_max_nums, left_of_min_nums_pointer_index)
+       	right_length = get_all_right_nums_length(right_pointer_index_of_max_nums, right_of_min_nums_pointer_index)
+        
+
+        while left_length != right_length:
+        	if left_length > right_length:
+        		# find max num , and its index
+        		if max_nums[left_pointer_index_of_max_nums] >= left_of_min_nums[left_of_min_nums_pointer_index]:
+        			left_pointer_index_of_max_nums -= 1
+        		else:
+        			left_of_min_nums_pointer_index -= 1
+        	else:
+      			if max_nums[right_pointer_index_of_max_nums] <= right_of_min_nums[right_of_min_nums_pointer_index]:
+      				right_pointer_index_of_max_nums += 1
+      			else:
+      				right_of_min_nums_pointer_index += 1
+      		left_length = get_all_left_nums_length(left_pointer_index_of_max_nums, left_of_min_nums_pointer_index)
+       		right_length = get_all_right_nums_length(right_pointer_index_of_max_nums, right_of_min_nums_pointer_index)
 
  
 
