@@ -26,12 +26,12 @@ def get_mini_val_from_two_list(right_mini_nums, right_max_nums):
 
 
 class MedianItem(object):
-	def __init__(self, num_index, num_list):
-		self.num_index = num_index
-		self.num_list = num_list
+    def __init__(self, num_index, num_list):
+        self.num_index = num_index
+        self.num_list = num_list
 
-	def get_val(self):
-		return self.num_list[self.num_index]
+    def get_val(self):
+        return self.num_list[self.num_index]
 
 
 class MeidanStack(object):
@@ -39,7 +39,7 @@ class MeidanStack(object):
         self.items = []
 
     def add(self, medianitem):
-    	medianitem_val = medianitem.get_val()
+        medianitem_val = medianitem.get_val()
         if len(self.items) == 0:
             self.items.append(medianitem)
             return None, None
@@ -61,18 +61,45 @@ class MeidanStack(object):
                 self.items = self.items[-2:]
                 return left_popup, None
             else:
-            	left_popup, right_popup = self.items[0], self.items[1]
-            	self.items = [medianitem]
-            	return left_popup, right_popup
+                left_popup, right_popup = self.items[0], self.items[1]
+                self.items = [medianitem]
+                return left_popup, right_popup
 
     def __str__(self):
-    	if len(self.items) == 2:
-    		s = '%s , %s' % (self.items[0], self.items[1])
-    	elif len(self.items) == 1:
-    		s = '%s' % self.items[0]
-    	else:
-    		s = ''
-    	return s
+        if len(self.items) == 2:
+            s = '%s , %s' % (self.items[0], self.items[1])
+        elif len(self.items) == 1:
+            s = '%s' % self.items[0]
+        else:
+            s = ''
+        return s
+
+
+def gen_new_median_list(median_list, num):
+    if len(median_list) == 0:
+        median_list.append(num)
+        return median_list, None, None
+    if len(median_list) == 1:
+        if num >= median_list[0]:
+            median_list.append(num)
+        else:
+            median_list.insert(0, num)
+        return median_list, None, None
+    else:
+        if num <= median_list[0]:
+            median_list.insert(0, num)
+            right_popup = median_list[-1]
+            median_list = median_list[:2]
+            return median_list, None, right_popup
+        elif num >= median_list[1]:
+            median_list.append(num)
+            left_popup = median_list[0]
+            median_list = median_list[-2:]
+            return median_list, left_popup, None
+        else:
+            left_popup, right_popup = median_list[0], median_list[1]
+            median_list = [num]
+            return median_list, left_popup, right_popup
 
 
 class Solution(object):
@@ -83,9 +110,9 @@ class Solution(object):
         :rtype: float
         """
         if len(nums1) > len(nums2):
-        	max_nums, min_nums = nums1, nums2
+            max_nums, min_nums = nums1, nums2
         else:
-        	max_nums, min_nums = nums2, nums1
+            max_nums, min_nums = nums2, nums1
         indexs_list = get_two_median_num_index_from_list(max_nums)
 
         left_of_min_nums = []
@@ -93,12 +120,23 @@ class Solution(object):
         right_of_min_nums = []
 
         for num in min_nums:
-        	if num <= indexs_list[0]:
-        		left_of_min_nums.append(num)
-        	elif num >= indexs_list[-1]:
-        		right_of_min_nums.append(num)
-        	else:
-        		middle_of_min_nums.append(num)
+            if num <= indexs_list[0]:
+                left_of_min_nums.append(num)
+            elif num >= indexs_list[-1]:
+                right_of_min_nums.append(num)
+            else:
+                middle_of_min_nums.append(num)
+
+        if len(middle_of_min_nums) > 0:
+            middle_of_min_nums.insert(0, max_nums[indexs_list[0]])
+            middle_of_min_nums.append(max_nums[indexs_list[-1]])
+        else:
+            middle_of_min_nums = [max_nums[indexs_list[0]]]
+
+        middle_indexs_list = get_two_median_num_index_from_list(middle_of_min_nums)
+        median_nums = []
+        for m_index in middle_indexs_list:
+            median_nums.append(middle_of_min_nums[m_index])
 
         left_pointer_index_of_max_nums = indexs_list[0] - 1
         right_pointer_index_of_max_nums = indexs_list[-1] + 1
@@ -107,35 +145,35 @@ class Solution(object):
         right_of_min_nums_pointer_index = 0
 
         def get_all_left_nums_length(left_pointer_index_of_max_nums, left_of_min_nums_pointer_index):
-        	left_of_max_nums_length = left_pointer_index_of_max_nums + 1
-        	left_of_min_nums_length = len(left_of_min_nums) - left_of_min_nums_pointer_index - 1
-        	return left_of_max_nums_length + left_of_min_nums_length
+            left_of_max_nums_length = left_pointer_index_of_max_nums + 1
+            left_of_min_nums_length = len(left_of_min_nums) - left_of_min_nums_pointer_index - 1
+            return left_of_max_nums_length + left_of_min_nums_length
 
         def get_all_right_nums_length(right_pointer_index_of_max_nums, right_of_min_nums_pointer_index):
-        	right_of_max_nums = len(max_nums) - right_pointer_index_of_max_nums - 1
-        	right_of_min_nums =  len(right_of_min_nums) - right_of_min_nums_pointer_index - 1
-        	return right_of_max_nums + right_of_min_nums
+            right_of_max_nums = len(max_nums) - right_pointer_index_of_max_nums - 1
+            right_of_min_nums =  len(right_of_min_nums) - right_of_min_nums_pointer_index - 1
+            return right_of_max_nums + right_of_min_nums
 
-       	left_length = get_all_left_nums_length(left_pointer_index_of_max_nums, left_of_min_nums_pointer_index)
-       	right_length = get_all_right_nums_length(right_pointer_index_of_max_nums, right_of_min_nums_pointer_index)
+        left_length = get_all_left_nums_length(left_pointer_index_of_max_nums, left_of_min_nums_pointer_index)
+        right_length = get_all_right_nums_length(right_pointer_index_of_max_nums, right_of_min_nums_pointer_index)
         
 
         while left_length != right_length:
-        	if left_length > right_length:
-        		# find max num , and its index
-        		if max_nums[left_pointer_index_of_max_nums] >= left_of_min_nums[left_of_min_nums_pointer_index]:
-        			left_pointer_index_of_max_nums -= 1
-        		else:
-        			left_of_min_nums_pointer_index -= 1
-        	else:
-      			if max_nums[right_pointer_index_of_max_nums] <= right_of_min_nums[right_of_min_nums_pointer_index]:
-      				right_pointer_index_of_max_nums += 1
-      			else:
-      				right_of_min_nums_pointer_index += 1
-      		left_length = get_all_left_nums_length(left_pointer_index_of_max_nums, left_of_min_nums_pointer_index)
-       		right_length = get_all_right_nums_length(right_pointer_index_of_max_nums, right_of_min_nums_pointer_index)
+            if left_length > right_length:
+                # find max num , and its index
+                if max_nums[left_pointer_index_of_max_nums] >= left_of_min_nums[left_of_min_nums_pointer_index]:
+                    left_pointer_index_of_max_nums -= 1
+                else:
+                    left_of_min_nums_pointer_index -= 1
+            else:
+                if max_nums[right_pointer_index_of_max_nums] <= right_of_min_nums[right_of_min_nums_pointer_index]:
+                    right_pointer_index_of_max_nums += 1
+                else:
+                    right_of_min_nums_pointer_index += 1
+            left_length = get_all_left_nums_length(left_pointer_index_of_max_nums, left_of_min_nums_pointer_index)
+            right_length = get_all_right_nums_length(right_pointer_index_of_max_nums, right_of_min_nums_pointer_index)
 
- 
+        
 
 
 if __name__ == '__main__':
@@ -145,18 +183,20 @@ if __name__ == '__main__':
 
     # ms = MeidanStack()
     # for item in [2, 10,9,4,6,1]:
-    # 	ms.add(item)
-    # 	print(ms)
+    #   ms.add(item)
+    #   print(ms)
 
-    numslist1 = [1,4,7,9]
-    numslist2 = [5,11,17,19,20]
-    print(numslist1)
-    print(numslist2)
-    res = Solution().findMedianSortedArrays(numslist1, numslist2)
-    print(res)
+    # numslist1 = [1,4,7,9]
+    # numslist2 = [5,11,17,19,20]
+    # print(numslist1)
+    # print(numslist2)
+    # res = Solution().findMedianSortedArrays(numslist1, numslist2)
+    # print(res)
 
-
-
+    median_list = [1,5]
+    num = 1
+    median_list, left_popup, right_popup = gen_new_median_list(median_list, num)
+    print(median_list, left_popup, right_popup)
 
 
 
