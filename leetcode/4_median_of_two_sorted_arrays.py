@@ -177,21 +177,36 @@ class Solution(object):
                 right_list.append(num)
             else:
                 middle_list.append(num)
+        print('split min_nums:', left_list, middle_list, right_list)
+        if len(middle_list) > 0:
+            if len(indexs_list) > 1:
+                middle_list.insert(0, median_list[0])
+                middle_list.append(median_list[1])
+            else:
+                if median_list[0] >= middle_list[-1]:
+                    middle_list.append(median_list[0])
+                else:
+                    middle_list.insert(0, median_list[0])
+        else:
+            middle_list = median_list
 
         differ_length = abs(len(left_list) - len(right_list))
         if len(left_list) < len(right_list):
             nums1_start_pointer = 0
             nums2_start_pointer = indexs_list[-1] + 1
             items = get_small_many_nums_from_two_numlist(right_list, max_nums, differ_length, nums1_start_pointer, nums2_start_pointer)
+            middle_list = middle_list + items
         elif len(left_list) > len(right_list):
             nums1_start_pointer = len(left_list) - 1
-            nums2_start_pointer = indexs_list[0] - 1
+            nums2_start_pointer = indexs_list[0] + 1
             items = get_max_many_nums_from_two_numlist(left_list, max_nums, differ_length, nums1_start_pointer, nums2_start_pointer)
+            middle_list = items + middle_list
+        else:
+            items = []
 
-        print('split min_nums:', left_list, middle_list, right_list)
-        for num in items:
-            median_list, left_popup, right_popup = gen_new_median_list(median_list, num)
-
+        median_indexs = get_two_median_num_index_from_list(middle_list)
+        median_list = [middle_list[index] for index in median_indexs]
+        print('items:', items)
         print(median_list)
         print(sum(median_list)/2.0)
 
@@ -223,12 +238,19 @@ if __name__ == '__main__':
     res = Solution().findMedianSortedArrays(numslist1, numslist2)
     print(res)
 
-    # nums1 = [1,4,7,9,18,20, 39, 500]
+    alllist = numslist1 + numslist2
+    alllist.sort()
+    indexs_list = get_two_median_num_index_from_list(alllist)
+    print(alllist)
+    for index in indexs_list:
+        print(alllist[index])
+
+    # nums1 = [1,4,7,9,18,20, 39, 450,498,500]
     # nums2 = [5,11,17,25,190,210]
     # length = 6
-    # nums1_start_pointer = 0
-    # nums2_start_pointer = 0
-    # items = get_small_many_nums_from_two_numlist(nums1, nums2, length, nums1_start_pointer, nums2_start_pointer)
+    # nums1_start_pointer = len(nums1) - 1
+    # nums2_start_pointer = len(nums2) - 1
+    # items = get_max_many_nums_from_two_numlist(nums1, nums2, length, nums1_start_pointer, nums2_start_pointer)
     # print(items)
 
 
