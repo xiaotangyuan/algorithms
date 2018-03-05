@@ -102,6 +102,21 @@ def gen_new_median_list(median_list, num):
             return median_list, left_popup, right_popup
 
 
+def split_numlist_to_three_list_by_medianlist(numlist, medianlist):
+    left_list = []
+    middle_list = []
+    right_list = []
+
+    for num in numlist:
+        if num <= medianlist[0]:
+            left_list.append(num)
+        elif num >= medianlist[-1]:
+            right_list.append(num)
+        else:
+            middle_list.append(num)
+    return left_list, middle_list, right_list
+
+
 class Solution(object):
     def findMedianSortedArrays(self, nums1, nums2):
         """
@@ -188,6 +203,10 @@ if __name__ == '__main__':
     # median_list, left_popup, right_popup = gen_new_median_list(median_list, num)
     # print(median_list, left_popup, right_popup)
 
+    numlist = [1, 4, 7, 9, 18, 29, 39, 500]
+    medianlist = [19,21]
+    print(split_numlist_to_three_list_by_medianlist(numlist, medianlist))
+
     # numslist = [1,2,3,4,5]
     # numslist = [1,2,3,4,6]
     # print(get_two_median_num_index_from_list(numslist))
@@ -197,11 +216,11 @@ if __name__ == '__main__':
     #   ms.add(item)
     #   print(ms)
 
-    numslist1 = [1,4,7,9,18,20, 39, 500]
-    numslist2 = [5,11,17,25,190,210]
-    print(numslist1)
-    print(numslist2)
-    res = Solution().findMedianSortedArrays(numslist1, numslist2)
-    print(res)
+    # numslist1 = [1,4,7,9,18,20, 39, 500]
+    # numslist2 = [5,11,17,25,190,210]
+    # print(numslist1)
+    # print(numslist2)
+    # res = Solution().findMedianSortedArrays(numslist1, numslist2)
+    # print(res)
 
 
